@@ -85,6 +85,12 @@ type Translations = {
 			confirmRemove: string
 			confirmRemoveDesc: string
 			remove: string
+			totalItems: string
+			moviesCount: string
+			tvShowsCount: string
+			movie: string
+			tvShow: string
+			added: string
 		}
 		common: {
 			loading: string
@@ -139,6 +145,7 @@ type Translations = {
 			crime: string
 			adventure: string
 			war: string
+			releaseYear: string
 		}
 		settings: {
 			account: string
