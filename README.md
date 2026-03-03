@@ -1,5 +1,7 @@
 # 🎬 Spacefeel - Cinema Streaming Platform
 
+**🌐 Live Demo: [spacefeel-dev-uao6.vercel.app](https://spacefeel-dev-uao6.vercel.app/)**
+
 A modern, production-ready cinema streaming platform built with Next.js 14, featuring a beautiful Apple TV-inspired design.
 
 ## ✨ Features
