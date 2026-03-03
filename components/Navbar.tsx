@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -54,6 +54,7 @@ export default function Navbar() {
 	const searchContainerRef = useRef<HTMLDivElement>(null)
 
 	const debouncedSearchQuery = useDebounce(searchQuery, 400)
+	const prevDebouncedQueryRef = useRef(debouncedSearchQuery)
 
 	// 1. ЛОГИКА ОТКРЫТИЯ ПОИСКА
 	const handleOpenSearch = () => {
@@ -91,24 +92,28 @@ export default function Navbar() {
 
 	// 3. ГЛАВНАЯ ЛОГИКА (LIVE SEARCH + ВОЗВРАТ)
 	useEffect(() => {
-		// Работаем только если поиск открыт
-		if (searchOpen) {
-			// А. Если есть текст -> идем на страницу поиска
-			if (debouncedSearchQuery.trim()) {
-				const url = `/search?q=${encodeURIComponent(debouncedSearchQuery.trim())}`
-				if (!pathname.startsWith('/search') || pathname !== url) {
-					router.push(url)
-				}
+		if (!searchOpen) return
+
+		const queryChanged = prevDebouncedQueryRef.current !== debouncedSearchQuery
+		prevDebouncedQueryRef.current = debouncedSearchQuery
+
+		// А. Если есть текст
+		if (debouncedSearchQuery.trim()) {
+			const url = `/search?q=${encodeURIComponent(debouncedSearchQuery.trim())}`
+			if (queryChanged) {
+				// Пользователь печатает -> переходим на поиск (или синхронизируем URL)
+				router.push(url)
 			}
-			// Б. Если текст удалили И мы сейчас на поиске -> возвращаемся назад
-			else if (debouncedSearchQuery === '' && pathname.startsWith('/search')) {
-				// Возвращаемся туда, откуда пришли, или на главную
-				const targetPath =
-					previousPath && !previousPath.startsWith('/search')
-						? previousPath
-						: '/'
-				router.push(targetPath)
-			}
+			// Если queryChanged=false, значит pathname изменился (пользователь кликнул на фильм)
+			// -> не перенаправляем обратно
+		}
+		// Б. Если текст удалили И мы сейчас на поиске -> возвращаемся назад
+		else if (debouncedSearchQuery === '' && pathname.startsWith('/search')) {
+			const targetPath =
+				previousPath && !previousPath.startsWith('/search')
+					? previousPath
+					: '/'
+			router.push(targetPath)
 		}
 	}, [debouncedSearchQuery, pathname, router, searchOpen, previousPath])
 
