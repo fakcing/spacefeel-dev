@@ -67,7 +67,7 @@ export default function ProfilePage() {
         });
 
         const movies = await Promise.all(moviePromises);
-        setWatchlistMovies(movies.filter((m): m is Movie => m !== null));
+        setWatchlistMovies(movies.filter((m) => m !== null) as Movie[]);
       } catch (error) {
         console.error('Error fetching watchlist:', error);
       } finally {
