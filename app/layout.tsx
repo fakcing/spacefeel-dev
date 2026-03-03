@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { Suspense } from 'react';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -29,7 +30,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <ToastProvider />
         <div className="min-h-screen bg-primary">
-          <Navbar />
+          <Suspense fallback={null}>
+            <Navbar />
+          </Suspense>
           <main className="pt-16">{children}</main>
           <Footer />
         </div>
