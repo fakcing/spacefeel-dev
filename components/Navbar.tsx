@@ -15,7 +15,7 @@ import {
 	Settings,
 } from 'lucide-react'
 import { useStore } from '@/store/useStore'
-import { getTranslation, translations } from '@/lib/i18n'
+import { getTranslation } from '@/lib/i18n'
 import type { Language } from '@/types'
 
 function useDebounce<T>(value: T, delay: number): T {
@@ -37,7 +37,7 @@ export default function Navbar() {
 	const searchParams = useSearchParams()
 	const { language, setLanguage, isAuthenticated, user, logout } = useStore()
 
-	const t = getTranslation(language as any) || translations['en']
+	const t = getTranslation(language)
 
 	const [scrolled, setScrolled] = useState(false)
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -52,6 +52,7 @@ export default function Navbar() {
 
 	const searchInputRef = useRef<HTMLInputElement>(null)
 	const searchContainerRef = useRef<HTMLDivElement>(null)
+	const clearTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
 	const debouncedSearchQuery = useDebounce(searchQuery, 400)
 	const prevDebouncedQueryRef = useRef(debouncedSearchQuery)
@@ -170,11 +171,17 @@ export default function Navbar() {
 		setSearchOpen(false) // Сразу закрываем поиск, чтобы useEffect перестал работать
 		setMobileMenuOpen(false)
 
-		// Очищаем текст с небольшой задержкой для красоты (не обязательно, но приятно)
-		setTimeout(() => {
+		if (clearTimeoutRef.current) clearTimeout(clearTimeoutRef.current)
+		clearTimeoutRef.current = setTimeout(() => {
 			setSearchQuery('')
 		}, 300)
 	}
+
+	useEffect(() => {
+		return () => {
+			if (clearTimeoutRef.current) clearTimeout(clearTimeoutRef.current)
+		}
+	}, [])
 
 	return (
 		<motion.nav

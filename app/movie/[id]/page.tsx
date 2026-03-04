@@ -33,6 +33,10 @@ export default function MovieDetailPage() {
 
 	useEffect(() => {
 		const fetchData = async () => {
+			if (isNaN(movieId)) {
+				setIsLoading(false)
+				return
+			}
 			setIsLoading(true)
 			try {
 				let details = await getMediaDetails(movieId, 'movie', language)

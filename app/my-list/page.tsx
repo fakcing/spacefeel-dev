@@ -214,27 +214,26 @@ export default function MyListPage() {
 				{/* Stats Cards */}
 				<div className='mb-8 grid grid-cols-3 gap-4'>
 					{[
-						// Исправлены ключи t.profile.* на строки, так как их нет в типах
 						{
 							icon: List,
 							color: 'accent',
 							bgColor: 'bg-accent/20',
 							value: stats.total,
-							label: 'Total Items',
+							label: t.profile.totalItems,
 						},
 						{
 							icon: Film,
 							color: 'blue-400',
 							bgColor: 'bg-blue-500/20',
 							value: stats.movies,
-							label: 'Movies',
+							label: t.profile.moviesCount,
 						},
 						{
 							icon: Tv,
 							color: 'purple-400',
 							bgColor: 'bg-purple-500/20',
 							value: stats.tvShows,
-							label: 'TV Shows',
+							label: t.profile.tvShowsCount,
 						},
 					].map((stat, index) => {
 						const Icon = stat.icon
@@ -322,10 +321,9 @@ export default function MyListPage() {
 								{t.search.sortBy}:
 							</span>
 							{[
-								// Исправлены ключи переводов
-								{
+											{
 									value: 'added' as SortOption,
-									label: 'Date Added',
+									label: t.profile.sortByDate,
 									icon: Clock,
 								},
 								{ value: 'title' as SortOption, label: t.profile.sortByName },
@@ -521,8 +519,7 @@ export default function MyListPage() {
 														) : (
 															<Tv className='h-4 w-4' />
 														)}
-														{/* Исправлен перевод */}
-														{movie.mediaType === 'movie' ? 'Movie' : 'TV Show'}
+{movie.mediaType === 'movie' ? t.profile.movie : t.profile.tvShow}
 													</span>
 													{year > 0 && <span>{year}</span>}
 													<span className='flex items-center gap-1'>
@@ -546,8 +543,7 @@ export default function MyListPage() {
 										</p>
 										<div className='mt-2 flex items-center gap-2 text-xs text-gray-500'>
 											<Clock className='h-3 w-3' />
-											{/* Исправлен перевод */}
-											Added {new Date(movie.addedAt).toLocaleDateString()}
+{t.profile.added} {new Date(movie.addedAt).toLocaleDateString()}
 										</div>
 									</div>
 								</MotionDiv>

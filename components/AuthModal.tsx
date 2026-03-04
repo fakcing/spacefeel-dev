@@ -33,8 +33,8 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
         await register(email, password, displayName);
       }
       onClose();
-    } catch (err: any) {
-      setError(err.message || 'An error occurred');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
     }
   };
 
@@ -43,8 +43,8 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
     try {
       await loginWithGoogle();
       onClose();
-    } catch (err: any) {
-      setError(err.message || 'An error occurred');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
     }
   };
 

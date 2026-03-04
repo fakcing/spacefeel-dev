@@ -32,6 +32,10 @@ export default function TvShowDetailPage() {
 
 	useEffect(() => {
 		const fetchData = async () => {
+			if (isNaN(movieId)) {
+				setIsLoading(false)
+				return
+			}
 			setIsLoading(true)
 			try {
 				// Сначала пробуем как TV (так как это страница TV)
@@ -105,11 +109,23 @@ export default function TvShowDetailPage() {
 		video => video.type === 'Trailer' && video.site === 'YouTube',
 	)
 
+	const toastStyle = {
+		background: '#18181b',
+		color: '#fff',
+		border: '1px solid #333',
+	}
+
 	const handleWatchlistToggle = () => {
 		if (inWatchlist) {
 			removeFromWatchlist(movieId)
+			if (notifications) {
+				toast.error(t.hero.removedFromWatchlist, { style: toastStyle })
+			}
 		} else {
 			addToWatchlist(movieId, mediaType)
+			if (notifications) {
+				toast.success(t.hero.addedToWatchlist, { style: toastStyle })
+			}
 		}
 	}
 
@@ -156,7 +172,7 @@ export default function TvShowDetailPage() {
 									{inWatchlist ? (
 										<>
 											<Check className='h-5 w-5' />
-											In Watchlist
+											{t.hero.inList}
 										</>
 									) : (
 										<>
